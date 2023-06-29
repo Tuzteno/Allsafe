@@ -3,8 +3,8 @@ import torchvision.transforms as transforms
 from torchvision.io import read_video, write_jpeg
 
 # Load the video
-video_path = '/Fine-Tunning/video-to-frames/videos/myself.mov'
-video, audio, info = read_video(video_path)
+video_path = '/app/Fine-Tunning/video-to-frames/videos/input_video.mov'
+video, audio, info = read_video(video_path, pts_unit='sec')  # Specify pts_unit as 'sec' for .mov format
 
 # Define frame extraction interval
 frame_interval = 10  # Extract every 10th frame
@@ -35,7 +35,7 @@ with torch.no_grad():
     features = model.extract_features(frames_tensor)
 
 # Save the extracted images
-output_path = '/Fine-Tunning/video-to-frames/images/'
+output_path = '/app/Fine-Tunning/video-to-frames/output_frames/'
 for i in range(len(features)):
-    image_path = output_path + f'frame_{i}.jpg'
+    image_path = '{}frame_{}.jpg'.format(output_path, i)
     write_jpeg(frames[i], image_path)
