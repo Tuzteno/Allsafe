@@ -50,5 +50,4 @@ with torch.no_grad():
 output_path = '/home/hadmin/Allsafe/finetuning/videos-to-frames/images/'
 for i in range(len(frames)):
     image_path = '{}frame_{}.jpg'.format(output_path, i)
-    write_jpeg((frames[i] * 255).byte(), image_path)  # Convert to uint8 before saving
-
+    write_jpeg((frames[i] * 255).type(torch.uint8), image_path)  # Convert to uint8 before saving
