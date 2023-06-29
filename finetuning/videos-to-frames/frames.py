@@ -1,6 +1,7 @@
 import torch
 import torchvision.transforms as transforms
 from torchvision.io import read_video, write_jpeg
+from torchvision.models import resnet50
 
 # Load the video
 video_path = '/home/hadmin/Allsafe/finetuning/videos-to-frames/videos/myself.mov'
@@ -29,15 +30,24 @@ for frame_idx in range(0, video.shape[0], frame_interval):
 frames_tensor = torch.stack(frames)
 
 # Load a pre-trained model
-model = torch.hub.load('pytorch/vision:v0.9.0', 'resnet50', pretrained=True)
+model = resnet50(pretrained=True)
 model.eval()
 
 # Process frames with the model
 with torch.no_grad():
-    features = model.extract_features(frames_tensor)
+    features = model.conv1(frames_tensor)
+    features = model.bn1(features)
+    features = model.relu(features)
+    features = model.maxpool(features)
+    features = model.layer1(features)
+    features = model.layer2(features)
+    features = model.layer3(features)
+    features = model.layer4(features)
+    features = model.avgpool(features)
+    features = torch.flatten(features, 1)
 
 # Save the extracted images
 output_path = '/home/hadmin/Allsafe/finetuning/videos-to-frames/images/'
-for i in range(len(features)):
+for i in range(len(frames)):
     image_path = '{}frame_{}.jpg'.format(output_path, i)
     write_jpeg(frames[i], image_path)
