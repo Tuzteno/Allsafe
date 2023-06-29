@@ -3,7 +3,7 @@ import torchvision.transforms as transforms
 from torchvision.io import read_video, write_jpeg
 
 # Load the video
-video_path = '/Fine-Tunning/video-to-frames/videos/myself.mov'
+video_path = '/home/hadmin/Allsafe/finetuning/videos-to-frames/videos/myself.mov'
 video, audio, info = read_video(video_path, pts_unit='sec')  # Specify pts_unit as 'sec' for .mov format
 
 # Define frame extraction interval
@@ -20,6 +20,8 @@ transform = transforms.Compose([
 frames = []
 for frame_idx in range(0, video.shape[0], frame_interval):
     frame = video[frame_idx]
+    if frame.shape[0] > 4:
+        frame = frame[:3]  # Keep only the first 3 channels (RGB)
     frame = transform(frame)
     frames.append(frame)
 
@@ -35,7 +37,7 @@ with torch.no_grad():
     features = model.extract_features(frames_tensor)
 
 # Save the extracted images
-output_path = '/Fine-Tunning/video-to-frames/images/'
+output_path = '/home/hadmin/Allsafe/finetuning/videos-to-frames/images/'
 for i in range(len(features)):
-    image_path = output_path + 'frame_{}.jpg'.format(i)
+    image_path = '{}frame_{}.jpg'.format(output_path, i)
     write_jpeg(frames[i], image_path)
