@@ -30,7 +30,7 @@ for frame_idx in range(0, video.shape[0], frame_interval):
 frames_tensor = torch.stack(frames)
 
 # Load a pre-trained model
-model = resnet50(pretrained=True)
+model = resnet50(pretrained=False, weights='imagenet')
 model.eval()
 
 # Process frames with the model
@@ -50,4 +50,4 @@ with torch.no_grad():
 output_path = '/home/hadmin/Allsafe/finetuning/videos-to-frames/images/'
 for i in range(len(frames)):
     image_path = '{}frame_{}.jpg'.format(output_path, i)
-    write_jpeg((frames[i] * 255).to(torch.uint8), image_path)
+    write_jpeg(frames[i], image_path)
