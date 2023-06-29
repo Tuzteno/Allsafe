@@ -3,7 +3,7 @@ import torchvision.transforms as transforms
 from torchvision.io import read_video, write_jpeg
 
 # Load the video
-video_path = '/Fine-Tunning/video-to-frames/videos/myself.mp4'
+video_path = '/Fine-Tunning/video-to-frames/videos/myself.mov'
 video, audio, info = read_video(video_path)
 
 # Define frame extraction interval
