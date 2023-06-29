@@ -30,7 +30,7 @@ for frame_idx in range(0, video.shape[0], frame_interval):
 frames_tensor = torch.stack(frames)
 
 # Load a pre-trained model
-model = resnet50(pretrained=False, weights='imagenet')
+model = resnet50(pretrained=True)
 model.eval()
 
 # Process frames with the model
